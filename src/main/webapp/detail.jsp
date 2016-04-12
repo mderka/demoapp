@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.google.gcloud.dns.RecordSet" %>
+<%@ page import="com.google.gcloud.dns.Zone" %>
 <%@ page import="com.google.gcloud.dns.ChangeRequest" %>
 <%@ page import="controller.Controller" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -19,7 +20,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>Martin's demo app</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -46,13 +47,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="/">Martin's demo app</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="active"><a href="/">Home</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -61,12 +60,67 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get
-            is this text and a mostly barebones HTML document.</p>
+        <h1>Demo app for gcloud-java-dns (intern project)</h1>
+        <p class="lead">This is a quick demo app implemented using gcloud-java-dns.</p>
     </div>
 
-    <h2>Record Sets in <%=request.getParameter("name")%></h2>
+    <% if(request.getParameter("added") != null) {%>
+    <div class="alert alert-success">Change for adding the record was successfully created.</div>
+    <%}%>
+    <% if(request.getParameter("delete") != null) {%>
+        <div class="alert alert-info">Change for deleting the record was successfully created.</div>
+     <%}%>
+
+
+
+  <div class="row">
+  <div class="col-md-4">
+      <h2>Zone Information</h2>
+      <%
+
+      Zone zone = Controller.getZone(request.getParameter("name"));
+
+      out.println("<strong>Name:</strong> " + zone.name() + "<br>");
+      out.println("<strong>Created:</strong> " + zone.creationTimeMillis() + "<br>");
+      out.println("<strong>Domain:</strong> " + zone.dnsName() + "<br>");
+      out.println("<strong>Description:</strong> " + zone.description() + "<br>");
+      out.println("<strong>Nameservers:</strong><ol>");
+      for(String s : zone.nameServers()) {
+          out.println("<li>" + s + "</li>");
+      }
+      out.println("</ol>");
+      %>
+
+<br>
+<br>
+<br>
+<h2>Add Records</h2>
+<form action="addRecord" method="POST">
+  <fieldset class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="www.domain.com.">
+  </fieldset>
+  <fieldset class="form-group">
+      <label for="type">Type</label>
+      <input type="text" class="form-control" id="type" name="type" placeholder="A, AAAA,...">
+  </fieldset>
+  <fieldset class="form-group">
+        <label for="value">Value</label>
+        <input type="text" class="form-control" id="value" name="value" placeholder="255.255.225.255">
+    </fieldset>
+  <fieldset class="form-group">
+    <label for="ttl">TTL</label>
+    <input type="text" class="form-control" id="ttl" name="ttl" placeholder="21600">
+  </fieldset>
+   <input type="hidden" class="form-control" id="zoneName" name="zoneName" value="<%=request.getParameter("name")%>">
+   <button type="submit" class="btn btn-primary pull-right">Add Record</button>
+ </form>
+
+
+  </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-7">
+    <h2>Record Sets</h2>
     <table class="table">
         <thead>
         <tr>
@@ -83,7 +137,7 @@
             <td><%=counter%></td>
             <td><%=rrset.type()%></td>
             <td><%=rrset.name()%></td>
-            <td></td>
+            <td><% out.println(rrset.records().get(0)); %></td>
             <td><%=rrset.ttl()%></td>
             <td>
                 <a href="deleteRecord?zone=<%=request.getParameter("name")%>&record=<%=rrset.name()%>&type=<%=rrset.type()%>"
@@ -95,7 +149,8 @@
         </thead>
     </table>
 
-    <h2>Changes in <%=request.getParameter("name")%></h2>
+
+    <h2>Changes</h2>
     <table class="table">
         <thead>
         <tr>
@@ -122,8 +177,9 @@
         <%}%>
         </thead>
     </table>
+</div>
 
-    <form>
+</div>
 
 
 

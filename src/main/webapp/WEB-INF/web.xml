@@ -12,6 +12,18 @@
         <servlet-name>deleteRecord</servlet-name>
         <servlet-class>servlet.DeleteRecord</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>deleteZone</servlet-name>
+        <servlet-class>servlet.DeleteZone</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addZone</servlet-name>
+        <servlet-class>servlet.AddZone</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addRecord</servlet-name>
+        <servlet-class>servlet.AddRecord</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>zones</servlet-name>
         <url-pattern>/</url-pattern>
@@ -23,5 +35,17 @@
     <servlet-mapping>
         <servlet-name>deleteRecord</servlet-name>
         <url-pattern>/deleteRecord</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteZone</servlet-name>
+        <url-pattern>/deleteZone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addZone</servlet-name>
+        <url-pattern>/addZone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addRecord</servlet-name>
+        <url-pattern>/addRecord</url-pattern>
     </servlet-mapping>
 </web-app>

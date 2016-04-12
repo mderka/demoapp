@@ -3,10 +3,12 @@ package controller;
 import com.google.common.collect.Iterators;
 import com.google.gcloud.AuthCredentials;
 import com.google.gcloud.dns.ChangeRequest;
+import com.google.gcloud.dns.ChangeRequestInfo;
 import com.google.gcloud.dns.Dns;
 import com.google.gcloud.dns.DnsOptions;
 import com.google.gcloud.dns.RecordSet;
 import com.google.gcloud.dns.Zone;
+import com.google.gcloud.dns.ZoneInfo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,11 +59,42 @@ public class Controller {
 
   public static void deleteRecord(String zoneName, String recordName, String type) {
     RecordSet[] records = getRecords(zoneName);
-    for(RecordSet record : records) {
-      if(record.name().equals(recordName) && record.type() == RecordSet.Type.valueOf(type)) {
+    for (RecordSet record : records) {
+      if (record.name().equals(recordName) && record.type() == RecordSet.Type.valueOf(type)) {
         dns().applyChangeRequest(zoneName, ChangeRequest.builder().delete(record).build());
         return;
       }
     }
+  }
+
+  public static void deleteZone(String zoneName) {
+    RecordSet[] records = getRecords(zoneName);
+    ChangeRequestInfo.Builder builder = ChangeRequest.builder();
+    for (RecordSet record : records) {
+      if (record.type() != RecordSet.Type.NS && record.type() != RecordSet.Type.SOA) {
+        builder.delete(record);
+      }
+    }
+    ChangeRequestInfo change = builder.build();
+    if (!change.deletions().isEmpty()) {
+      ChangeRequest changeRequest = dns().applyChangeRequest(zoneName, change);
+      while (changeRequest.status() != ChangeRequestInfo.Status.DONE) {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        changeRequest = dns().getChangeRequest(zoneName, changeRequest.generatedId());
+      }
+    }
+    dns().delete(zoneName);
+  }
+
+  public static void addZone(String name, String domain, String description) {
+    ZoneInfo zone = dns().create(ZoneInfo.of(name, domain, description));
+  }
+
+  public static void addRecord(String zoneName, RecordSet recordSet) {
+    dns().applyChangeRequest(zoneName, ChangeRequest.builder().add(recordSet).build());
   }
 }

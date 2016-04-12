@@ -12,14 +12,14 @@ import controller.Controller;
 /**
  * Created by derka on 4/12/16.
  */
-public class DeleteRecord extends HttpServlet {
+public class AddZone extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String zoneName = request.getParameter("zone");
-    String recordName = request.getParameter("record");
-    String recordType = request.getParameter("type");
-    Controller.deleteRecord(zoneName, recordName, recordType);
-    response.sendRedirect("detail?name=" + zoneName + "&delete=true");
+    String name = request.getParameter("name");
+    String domain = request.getParameter("domain");
+    String description = request.getParameter("description");
+    Controller.addZone(name, domain, description);
+    response.sendRedirect("/?added=true");
   }
 }

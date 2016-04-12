@@ -18,7 +18,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>Martin's demo app</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -45,13 +45,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="/">Martin's demo app</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="active"><a href="/">Home</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -60,10 +58,16 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get
-            is this text and a mostly barebones HTML document.</p>
+        <h1>Demo app for gcloud-java-dns (intern project)</h1>
+        <p class="lead">This is a quick demo app implemented using gcloud-java-dns.</p>
     </div>
+
+    <% if(request.getParameter("added") != null) {%>
+    <div class="alert alert-success">Zone was successfully added.</div>
+    <%}%>
+    <% if(request.getParameter("delete") != null) {%>
+        <div class="alert alert-info">Zone was successfully deleted.</div>
+     <%}%>
 
     <table class="table">
         <thead>
@@ -82,7 +86,7 @@
             <td><%=zone.description()%></td>
             <td>
                 <a href="detail?name=<%=zone.name()%>" class="btn btn-default btn-sm">Details</a>
-                <a href="" class="btn btn-default btn-sm">Delete</a>
+                <a href="deleteZone?zone=<%=zone.name()%>" class="btn btn-default btn-sm">Delete</a>
             </td>
             </tr>
         <%}%>
@@ -90,7 +94,26 @@
     </table>
 
 
-
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6">
+<form action="addZone" method="GET">
+  <fieldset class="form-group">
+    <label for="name">Zone Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="new zone name">
+  </fieldset>
+  <fieldset class="form-group">
+      <label for="domain">Domain Name</label>
+      <input type="text" class="form-control" id="domain" name="domain" placeholder="example.com.">
+    </fieldset>
+  <fieldset class="form-group">
+    <label for="description">Description</label>
+    <input type="text" class="form-control" id="description" name="description" placeholder="description....">
+  </fieldset>
+   <button type="submit" class="btn btn-primary pull-right">Add Zone</button>
+ </form>
+ </div>
+</div>
 
 
 </div><!-- /.container -->
