@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
+    <servlet>
+        <servlet-name>zones</servlet-name>
+        <jsp-file>index.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>detail</servlet-name>
+        <jsp-file>detail.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteRecord</servlet-name>
+        <servlet-class>servlet.DeleteRecord</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zones</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>detail</servlet-name>
+        <url-pattern>/detail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteRecord</servlet-name>
+        <url-pattern>/deleteRecord</url-pattern>
+    </servlet-mapping>
 </web-app>
